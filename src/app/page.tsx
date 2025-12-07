@@ -8,6 +8,7 @@ export default function BrandTestPage() {
   const [companyName, setCompanyName] = useState('');
   const [website, setWebsite] = useState('');
   const [userDescription, setUserDescription] = useState('');
+  const [apiKey, setApiKey] = useState('');
 
   const [status, setStatus] = useState<'idle' | 'enriching' | 'scrubbing' | 'generating' | 'analyzing' | 'complete' | 'error'>('idle');
   const [logs, setLogs] = useState<string[]>([]);
@@ -35,7 +36,7 @@ export default function BrandTestPage() {
 
       // If user didn't provide a long description, or even if they did, we enrich it.
       // But let's append the enriched info to the user's description.
-      const enriched = await enrichCompanyData(companyName, website);
+      const enriched = await enrichCompanyData(companyName, website, apiKey);
       currentDesc = `${userDescription}\n\nAdditional Info from Search:\n${enriched}`;
       setEnrichedDesc(currentDesc);
       addLog('✅ Data enriched.');
@@ -43,21 +44,21 @@ export default function BrandTestPage() {
       // Step 2: Scrub
       setStatus('scrubbing');
       addLog('🧹 Anonymizing description...');
-      const anonymous = await anonymizeDescription(companyName, currentDesc);
+      const anonymous = await anonymizeDescription(companyName, currentDesc, apiKey);
       setAnonymizedDesc(anonymous);
       addLog('✅ Description anonymized.');
 
       // Step 3: Generate
       setStatus('generating');
       addLog('🎨 Generating infographic (this may take a moment)...');
-      const imageBase64 = await generateInfographic(anonymous);
+      const imageBase64 = await generateInfographic(anonymous, apiKey);
       setGeneratedImage(imageBase64);
       addLog('✅ Image generated.');
 
       // Step 4: Analyze
       setStatus('analyzing');
       addLog('👁️ Analyzing image for brand presence...');
-      const analysis = await analyzeImage(imageBase64, companyName);
+      const analysis = await analyzeImage(imageBase64, companyName, apiKey);
       setAnalysisResult(analysis);
       addLog('✅ Analysis complete.');
 
@@ -92,6 +93,17 @@ export default function BrandTestPage() {
             <div className="bg-white shadow rounded-lg p-6">
               <h2 className="text-xl font-semibold mb-4 text-gray-800">1. Company Details</h2>
               <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Gemini API Key (Optional)</label>
+                  <input
+                    type="password"
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2 border text-gray-900"
+                    value={apiKey}
+                    onChange={(e) => setApiKey(e.target.value)}
+                    placeholder="Leave blank to use server env var"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">If you don't provide a key, the app will try to use the server's environment variable.</p>
+                </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700">Company Name</label>
                   <input

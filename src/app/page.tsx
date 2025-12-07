@@ -82,9 +82,14 @@ export default function BrandTestPage() {
               <p className="text-gray-500 mt-1">LLM Brand Presence Test</p>
             </div>
           </div>
-          <Link href="/simple-test" className="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded">
-            Go to Simple Test
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link href="/payments" className="text-sm font-medium text-indigo-600 hover:text-indigo-800">
+              Upgrade Plan
+            </Link>
+            <Link href="/simple-test" className="text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded">
+              Go to Simple Test
+            </Link>
+          </div>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

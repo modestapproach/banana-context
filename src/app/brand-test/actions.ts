@@ -22,7 +22,7 @@ export interface BrandTestState {
 }
 
 // Step 1: Enrich
-export async function enrichCompanyData(companyName: string, website: string, apiKey?: string): Promise<string> {
+export async function enrichCompanyData(companyName: string, website: string, userDescription: string, apiKey?: string): Promise<string> {
     console.log(`Enriching data for ${companyName}...`);
     const genAI = getGenAI(apiKey);
     // Use Gemini 3 Pro for advanced reasoning and search
@@ -31,9 +31,22 @@ export async function enrichCompanyData(companyName: string, website: string, ap
         tools: [{ googleSearch: {} }]
     });
 
-    const prompt = `Find detailed information about the company "${companyName}" ${website ? `(${website})` : ''}. 
-  Describe what they do, their key products, and the specific market or problem they solve. 
-  Keep it concise but informative.`;
+    const prompt = `You are an expert researcher helping to verify if a company is present in an LLM's training data.
+  
+  Target Company: "${companyName}"
+  Website: "${website || 'Not provided'}"
+  User's Description: "${userDescription}"
+
+  Task:
+  1. Search for the company "${companyName}".
+  2. COMPARE the search results with the User's Description.
+  3. CRITICAL: If the search results describe a DIFFERENT company or a DIFFERENT industry than the User's Description, DISCARD the search results.
+     - Example: User says "Tractor company", Search finds "Software company". -> Discard search.
+  4. Output a detailed description of the company.
+     - If search matched: Combine search info with user info.
+     - If search conflicted: Use ONLY the User's Description (you can expand on it slightly using general knowledge of that type of business, but do NOT include specific facts from the conflicting search).
+
+  Return ONLY the final description. Do not explain your reasoning.`;
 
     const result = await model.generateContent(prompt);
     const text = result.response.text();

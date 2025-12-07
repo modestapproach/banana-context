@@ -36,8 +36,8 @@ export default function BrandTestPage() {
 
       // If user didn't provide a long description, or even if they did, we enrich it.
       // But let's append the enriched info to the user's description.
-      const enriched = await enrichCompanyData(companyName, website, apiKey);
-      currentDesc = `${userDescription}\n\nAdditional Info from Search:\n${enriched}`;
+      const enriched = await enrichCompanyData(companyName, website, userDescription, apiKey);
+      currentDesc = enriched; // The enriched data now handles the combination/validation logic
       setEnrichedDesc(currentDesc);
       addLog('✅ Data enriched.');
 

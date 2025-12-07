@@ -17,6 +17,16 @@ In the age of Generative AI, understanding how your brand is perceived—or if i
 
 If your brand appears in the image generated from a generic description, it's a strong indicator of high brand presence in the model's training data!
 
+## 📸 Examples
+
+### Match Found
+![Match Found](./public/match-found.png)
+*In this example, the user searched for "Spotify". The model generated an infographic for "music streaming services" and, due to high brand presence, explicitly included the Spotify logo and branding without being prompted to do so.*
+
+### Match Not Found
+![Match Not Found](./public/match-not-found.png)
+*Here, the user searched for a less ubiquitous brand. The model generated a generic infographic for the industry but did not hallucinate or include the specific brand's logo, indicating lower presence in the training data.*
+
 ## ✨ Features
 
 *   **Brand Presence Test**: The core agentic workflow described above.

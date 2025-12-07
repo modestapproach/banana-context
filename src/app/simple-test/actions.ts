@@ -3,7 +3,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // Hardcoded key as requested previously
-const API_KEY = 'AIzaSyBr6BKtEc3pv-yLHpVDYCPJiZVSvyi0eaI';
+const API_KEY = process.env.GOOGLE_GEMINI_API_KEY || '';
 const genAI = new GoogleGenerativeAI(API_KEY);
 
 export async function testGeminiConnection() {
